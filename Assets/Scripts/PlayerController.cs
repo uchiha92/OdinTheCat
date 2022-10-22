@@ -103,8 +103,8 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.GameOver();
     }*/
 
-    private void Reset(object sender, EventArgs e)
-    {
-        InitPlayer();
-    }
+   private void Reset(object sender, EventArgs e)
+   {
+       InitPlayer();
+   }
 }

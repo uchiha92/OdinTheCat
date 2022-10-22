@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetBool("isAlive", false);
         _killTrigger.OnDead -= Die;
-        Debug.Log("muertto");
+        Debug.Log("conejito muerto");
         GameManager.Instance.GameOver();
     }
     

@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - _menuCanvas: {instanceID: 0}
+  - _menuCanvas: {fileID: 3547554481007581008, guid: 3c7316b5b761a4b47a153cd5eba96a58, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

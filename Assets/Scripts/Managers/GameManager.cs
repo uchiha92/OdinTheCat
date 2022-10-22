@@ -47,11 +47,9 @@ public class GameManager : MonoBehaviour
     
     public void StartGame()
     {
-        Debug.Log("juego empezado");
         _menuCanvas.enabled = false;
         OnReset?.Invoke(this, EventArgs.Empty);
         SetGameState(EGameState.InTheGame);
-        Debug.Log(GetGameState());
     }
     
     public void GameOver()

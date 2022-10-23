@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     private EGameState _gameState;
     [SerializeField]
     private Canvas _menuCanvas;
-    public event EventHandler OnReset;
+    public event Action OnReset;
 
     void Awake()
     {
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _menuCanvas.enabled = false;
-        OnReset?.Invoke(this, EventArgs.Empty);
+        OnReset?.Invoke();
         SetGameState(EGameState.InTheGame);
     }
     

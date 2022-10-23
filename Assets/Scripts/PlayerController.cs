@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
     private void OnDestroy()
     {
         GameManager.Instance.OnReset -= Reset;
+        _killTrigger.OnDead -= Die;
     }
 
     private void Jump()
@@ -88,7 +89,7 @@ public class PlayerController : MonoBehaviour
         return isOnTheFloor;
     }
 
-    private void Die(object sender, EventArgs e)
+    private void Die()
     {
         _animator.SetBool("isAlive", false);
         _killTrigger.OnDead -= Die;
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.GameOver();
     }*/
 
-   private void Reset(object sender, EventArgs e)
+   private void Reset()
    {
        InitPlayer();
    }

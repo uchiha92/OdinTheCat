@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577411868998469469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8033373, y: -0.8908654, z: 2.7083697}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,4 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35cbb2b779117a047b8190bf638968a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _menuCanvas: {fileID: 3547554481007581008, guid: 3c7316b5b761a4b47a153cd5eba96a58, type: 3}
+  _menuCanvas: {fileID: 0}
+  _gameCanvas: {fileID: 0}
+  _gameOverCanvas: {fileID: 0}
+  gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}

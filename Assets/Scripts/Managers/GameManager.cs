@@ -3,19 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EGameState
-{
-    Menu,
-    InTheGame,
-    GameOver
-}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     private EGameState _gameState;
     [SerializeField]
     private Canvas _menuCanvas;
-    public event Action OnReset;
+    [SerializeField]
+    private Canvas _gameCanvas;
+    [SerializeField]
+    private Canvas _gameOverCanvas;
+    [SerializeField]
+    private GameStateChannel gameStateChannel;
 
     void Awake()
     {
@@ -32,29 +32,24 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _menuCanvas.enabled = true;
+        _gameCanvas.enabled = false;
+        _gameOverCanvas.enabled = false;
         SetGameState(EGameState.Menu);
     }
 
-    private void Update()
-    {
-        
-       /* if (Input.GetButtonDown("Fire1") && !_gameState.Equals(EGameState.InTheGame))
-        {
-            OnReset?.Invoke(this, EventArgs.Empty);
-            StartGame();
-        }*/
-    }
-    
     public void StartGame()
     {
         _menuCanvas.enabled = false;
-        OnReset?.Invoke();
+        _gameCanvas.enabled = true;
+        _gameOverCanvas.enabled = false;
         SetGameState(EGameState.InTheGame);
     }
-    
+
     public void GameOver()
     {
         _menuCanvas.enabled = false;
+        _gameCanvas.enabled = false;
+        _gameOverCanvas.enabled = true;
         SetGameState(EGameState.GameOver);
     }
     
@@ -66,6 +61,7 @@ public class GameManager : MonoBehaviour
     private void SetGameState(EGameState gameState)
     {
         this._gameState = gameState;
+        this.gameStateChannel.InvokeOnChangeGameState(gameState);
     }
 
     public EGameState GetGameState()

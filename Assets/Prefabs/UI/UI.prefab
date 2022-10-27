@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameOverCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4347239216742449931, guid: a9afff2eff6740a4fb80653f48993507, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToMainMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 4549544813192652553, guid: a9afff2eff6740a4fb80653f48993507, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -255,7 +259,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4785678728371699789, guid: a9afff2eff6740a4fb80653f48993507, type: 3}
+    - {fileID: 4785678727894458563, guid: a9afff2eff6740a4fb80653f48993507, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a9afff2eff6740a4fb80653f48993507, type: 3}
 --- !u!224 &9027781657070382811 stripped
 RectTransform:

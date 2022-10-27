@@ -31,9 +31,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        _menuCanvas.enabled = true;
-        _gameCanvas.enabled = false;
-        _gameOverCanvas.enabled = false;
+        EnableMenuCanvas();
         SetGameState(EGameState.Menu);
     }
 
@@ -42,6 +40,7 @@ public class GameManager : MonoBehaviour
         _menuCanvas.enabled = false;
         _gameCanvas.enabled = true;
         _gameOverCanvas.enabled = false;
+        LevelGenerator.Instance.GenerateInitialBlocks();
         SetGameState(EGameState.InTheGame);
     }
 
@@ -50,11 +49,20 @@ public class GameManager : MonoBehaviour
         _menuCanvas.enabled = false;
         _gameCanvas.enabled = false;
         _gameOverCanvas.enabled = true;
+        LevelGenerator.Instance.RemoveAllTheBlocks();
         SetGameState(EGameState.GameOver);
     }
-    
-    private void BackToMainMenu()
+
+    private void EnableMenuCanvas()
     {
+        _menuCanvas.enabled = true;
+        _gameCanvas.enabled = false;
+        _gameOverCanvas.enabled = false;
+    }
+    
+    public void BackToMainMenu()
+    {
+        EnableMenuCanvas();
         SetGameState(EGameState.Menu);
     }
 

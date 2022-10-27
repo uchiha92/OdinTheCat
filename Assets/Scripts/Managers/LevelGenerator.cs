@@ -6,6 +6,9 @@ using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
+    private const int InitialBlocks = 2;
+
+    private bool _isGeneratingInitialBlocks;
     public static LevelGenerator Instance;
     [SerializeField]
     private List<LevelBlock> currentLevelBlocks = new List<LevelBlock>();
@@ -23,14 +26,31 @@ public class LevelGenerator : MonoBehaviour
         else 
         { 
             Instance = this; 
-        } 
-        AddNewBlock();
-        AddNewBlock();
+        }
+    }
+
+    public void GenerateInitialBlocks()
+    {
+        _isGeneratingInitialBlocks = true;
+        for (int i = 0; i < InitialBlocks + 1; i++)
+        {
+            AddNewBlock();
+        }
+        _isGeneratingInitialBlocks = false;
     }
 
     public void AddNewBlock()
     {
-        int randomIndex = Random.Range(0, allLevelBlocks.Count);
+        int randomIndex;
+
+        if (_isGeneratingInitialBlocks)
+        {
+            randomIndex = 0;
+        }
+        else
+        { 
+            randomIndex = Random.Range(0, allLevelBlocks.Count);  
+        }
 
         LevelBlock block = (LevelBlock) Instantiate(allLevelBlocks[randomIndex]);
         block.transform.SetParent(this.transform, false);
@@ -55,15 +75,11 @@ public class LevelGenerator : MonoBehaviour
         Destroy(block.gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void RemoveAllTheBlocks()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        while (currentLevelBlocks.Count > 0)
+        {
+            RemoveOldBlocks();
+        }
     }
 }

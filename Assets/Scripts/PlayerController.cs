@@ -21,16 +21,16 @@ public class PlayerController : MonoBehaviour
         this._animator = GetComponent<Animator>();
         this._jumpForce = 25.0f;
         this._runningSpeed = 6.0f;
-        this._animator.SetBool("isAlive", true);
         this._startPosition = this.transform.position;
-        this.killPlayerChannel.OnDead += Die;
+        
+        this.gameStateChannel.OnChangeGameState += OnChangeGameState;
     }
     
     void InitPlayer()
     {
+        this.killPlayerChannel.OnDead += Die;
         _animator.SetBool("isAlive", true);
         this.transform.position = _startPosition;
-        this.gameStateChannel.OnChangeGameState += OnChangeGameState;
     }
     
     private void Update()
@@ -82,8 +82,14 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         _animator.SetBool("isAlive", false);
+        Invoke("SleepPlayer",1f);
         killPlayerChannel.OnDead -= Die;
         GameManager.Instance.GameOver();
+    }
+
+    private void SleepPlayer()
+    {
+        GetComponent<Rigidbody2D>().Sleep();
     }
 
     private void OnChangeGameState(EGameState newGameState)

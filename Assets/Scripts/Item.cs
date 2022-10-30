@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private EItemType _itemType;
+    [SerializeField]
+    private ItemCollectedChannel _itemCollectedChannel;
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (other.tag.Equals("Player"))
+        {
+            this._itemCollectedChannel.InvokeItemCollected(this._itemType);
+            Destroy(gameObject);
+        }
     }
 }

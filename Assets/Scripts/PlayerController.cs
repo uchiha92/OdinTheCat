@@ -3,42 +3,49 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private LayerMask _groundLayerMask;
+    private const string LAYERGROUND = "Ground";
+    private const string ISALIVE = "isAlive";
+    private const string ISGROUNDED = "isGrounded";
+    private const string BUTTONFIRE1 = "Fire1";
+    
     private float _jumpForce;
+    private float _runningSpeed;
+    private float _distanceTraveled;
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
-    private float _runningSpeed;
+    private LayerMask _groundLayerMask;
     private Vector3 _startPosition;
+    
     [SerializeField]
-    private KillPlayerChannel killPlayerChannel;
+    private KillPlayerChannel _killPlayerChannel;
     [SerializeField]
-    private GameStateChannel gameStateChannel;
+    private GameStateChannel _gameStateChannel;
 
     private void Awake()
     {
-        this._groundLayerMask = LayerMask.GetMask("Ground");
+        this._groundLayerMask = LayerMask.GetMask(LAYERGROUND);
         this._rigidbody2D = GetComponent<Rigidbody2D>();
         this._animator = GetComponent<Animator>();
         this._jumpForce = 25.0f;
         this._runningSpeed = 6.0f;
         this._startPosition = this.transform.position;
-        
-        this.gameStateChannel.OnChangeGameState += OnChangeGameState;
+        this._gameStateChannel.OnChangeGameState += OnChangeGameState;
     }
     
-    void InitPlayer()
+    private void InitPlayer()
     {
-        this.killPlayerChannel.OnDead += Die;
-        _animator.SetBool("isAlive", true);
+        this._killPlayerChannel.OnDead += Die;
+        this._animator.SetBool(ISALIVE, true);
         this.transform.position = _startPosition;
+        InitDistanceTraveled();
     }
     
     private void Update()
     {
         if (GameManager.Instance.GetGameState().Equals(EGameState.InTheGame))
         {
-            _animator.SetBool("isGrounded", IsOnTheFloor());
-            if (Input.GetButtonDown("Fire1") && IsOnTheFloor())
+            _animator.SetBool(ISGROUNDED, IsOnTheFloor());
+            if (Input.GetButtonDown(BUTTONFIRE1) && IsOnTheFloor())
             {
                 Jump();
             } 
@@ -59,8 +66,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        gameStateChannel.OnChangeGameState -= OnChangeGameState;
-        killPlayerChannel.OnDead -= Die;
+        _gameStateChannel.OnChangeGameState -= OnChangeGameState;
+        _killPlayerChannel.OnDead -= Die;
     }
 
     private void Jump()
@@ -79,11 +86,23 @@ public class PlayerController : MonoBehaviour
         return isOnTheFloor;
     }
 
+    private void InitDistanceTraveled()
+    {
+        this._distanceTraveled = 0;
+    }
+
+    public float GetDistanceTravelled()
+    {
+        this._distanceTraveled =
+            Vector2.Distance(new Vector2(this._startPosition.x, 0), new Vector2(this.transform.position.x, 0));
+        return _distanceTraveled;
+    }
+
     private void Die()
     {
-        _animator.SetBool("isAlive", false);
+        _animator.SetBool(ISALIVE, false);
         Invoke("SleepPlayer",1f);
-        killPlayerChannel.OnDead -= Die;
+        _killPlayerChannel.OnDead -= Die;
         GameManager.Instance.GameOver();
     }
 
@@ -100,13 +119,11 @@ public class PlayerController : MonoBehaviour
                InitPlayer();
                break;
            case EGameState.Menu:
-               Debug.Log("BunnyOnMenu");
                break;
            case EGameState.GameOver:
-               Debug.Log("BunnyOnGameOver");
+               GameManager.Instance.SetFinalGameScore(_distanceTraveled);
                break;
            default:
-               Debug.Log("BunnyOnDefault");
                break;
        }
        

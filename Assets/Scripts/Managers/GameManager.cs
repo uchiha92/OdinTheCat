@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     private EGameState _gameState;
+    private int _collectedCoins;
+    private float _finalGameScore;
     [SerializeField]
     private Canvas _menuCanvas;
     [SerializeField]
@@ -15,7 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Canvas _gameOverCanvas;
     [SerializeField]
-    private GameStateChannel gameStateChannel;
+    private GameStateChannel _gameStateChannel;
+    [SerializeField]
+    private ItemCollectedChannel _itemCollectedChannel;
 
     void Awake()
     {
@@ -29,35 +33,32 @@ public class GameManager : MonoBehaviour
         } 
     }
 
-    void Start()
+    private void Start()
     {
         EnableMenuCanvas();
         SetGameState(EGameState.Menu);
     }
 
+    private void OnDestroy()
+    {
+        this._itemCollectedChannel.OnItemCollected -= OnItemCollected;
+    }
+
     public void StartGame()
     {
-        _menuCanvas.enabled = false;
-        _gameCanvas.enabled = true;
-        _gameOverCanvas.enabled = false;
+        this._itemCollectedChannel.OnItemCollected += OnItemCollected;
         LevelGenerator.Instance.GenerateInitialBlocks();
+        EnableGameCanvas();
+        InitCoins();
         SetGameState(EGameState.InTheGame);
     }
 
     public void GameOver()
     {
-        _menuCanvas.enabled = false;
-        _gameCanvas.enabled = false;
-        _gameOverCanvas.enabled = true;
+        this._itemCollectedChannel.OnItemCollected -= OnItemCollected;
         LevelGenerator.Instance.RemoveAllTheBlocks();
+        EnableGameOverCanvas();
         SetGameState(EGameState.GameOver);
-    }
-
-    private void EnableMenuCanvas()
-    {
-        _menuCanvas.enabled = true;
-        _gameCanvas.enabled = false;
-        _gameOverCanvas.enabled = false;
     }
     
     public void BackToMainMenu()
@@ -66,16 +67,69 @@ public class GameManager : MonoBehaviour
         SetGameState(EGameState.Menu);
     }
 
+    private void EnableGameCanvas()
+    {
+        this._menuCanvas.enabled = false;
+        this._gameCanvas.enabled = true;
+        this._gameOverCanvas.enabled = false;
+    }
+
+    private void EnableGameOverCanvas()
+    {
+        this._menuCanvas.enabled = false;
+        this._gameCanvas.enabled = false;
+        this._gameOverCanvas.enabled = true;
+    }
+
+    private void EnableMenuCanvas()
+    {
+        this._menuCanvas.enabled = true;
+        this._gameCanvas.enabled = false;
+        this._gameOverCanvas.enabled = false;
+    }
+
+    private void OnItemCollected(EItemType itemType)
+    {
+        if (itemType.Equals(EItemType.Coin))
+        {
+            CollectCoin();
+        }
+    }
+    
+    private void InitCoins()
+    {
+        this._collectedCoins = 0;
+    }
+
+    private void CollectCoin()
+    {
+        ++this._collectedCoins;
+        Debug.Log(_collectedCoins);
+    }
+
+    public int GetCollectedCoins()
+    {
+        return this._collectedCoins;
+    }
+
+    public float GetFinalGameScore()
+    {
+        return this._finalGameScore;
+    }
+
+    public void SetFinalGameScore(float finalGameScore)
+    {
+        this._finalGameScore = finalGameScore;
+    }
+
     private void SetGameState(EGameState gameState)
     {
         this._gameState = gameState;
-        this.gameStateChannel.InvokeOnChangeGameState(gameState);
+        this._gameStateChannel.InvokeOnChangeGameState(gameState);
     }
 
     public EGameState GetGameState()
     {
         return this._gameState;
     }
-
-   
 }

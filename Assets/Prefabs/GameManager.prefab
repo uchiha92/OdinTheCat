@@ -47,4 +47,5 @@ MonoBehaviour:
   _menuCanvas: {fileID: 0}
   _gameCanvas: {fileID: 0}
   _gameOverCanvas: {fileID: 0}
-  gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
+  _gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
+  _itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}

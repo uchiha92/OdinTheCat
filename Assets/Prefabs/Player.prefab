@@ -154,8 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48441cc8be4604140a783f59383513f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killPlayerChannel: {fileID: 11400000, guid: 04fcecd716ef16a49a94038f7047077b, type: 2}
-  gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
+  _killPlayerChannel: {fileID: 11400000, guid: 04fcecd716ef16a49a94038f7047077b, type: 2}
+  _gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
 --- !u!95 &1235552421
 Animator:
   serializedVersion: 4

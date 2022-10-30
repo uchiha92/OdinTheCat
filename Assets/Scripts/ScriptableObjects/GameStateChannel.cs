@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_GameStateChannel",menuName = "ScriptableObjects/GameState/GameStateChannel")]
+[CreateAssetMenu(fileName = "SO_GameStateChannel",menuName = "Data/Channels/GameStateChannel")]
 public class GameStateChannel : ScriptableObject
 {
     public Action<EGameState> OnChangeGameState;

@@ -4,10 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SO_ItemCollectedChannel",menuName = "Data/Channels/ItemCollectedChannel")]
 public class ItemCollectedChannel : ScriptableObject
 {
-    public Action<EItemType> OnItemCollected;
+    public Action<EItemType, int> OnItemCollected;
 
-    public void InvokeItemCollected(EItemType itemType)
+    public void InvokeItemCollected(EItemType itemType, int value)
     {
-        OnItemCollected?.Invoke(itemType);
+        OnItemCollected?.Invoke(itemType, value);
     }
 }

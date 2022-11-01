@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 public class GameManager : MonoBehaviour
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ItemCollectedChannel _itemCollectedChannel;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this) 
         { 
@@ -70,41 +71,51 @@ public class GameManager : MonoBehaviour
     private void EnableGameCanvas()
     {
         this._menuCanvas.enabled = false;
+        this._menuCanvas.GetComponent<AudioSource>().Stop();
         this._gameCanvas.enabled = true;
+        this._gameCanvas.GetComponent<AudioSource>().Play();
         this._gameOverCanvas.enabled = false;
+        this._gameOverCanvas.GetComponent<AudioSource>().Stop();
     }
 
     private void EnableGameOverCanvas()
     {
         this._menuCanvas.enabled = false;
+        this._menuCanvas.GetComponent<AudioSource>().Stop();
         this._gameCanvas.enabled = false;
+        this._gameCanvas.GetComponent<AudioSource>().Stop();
         this._gameOverCanvas.enabled = true;
+        this._gameOverCanvas.GetComponent<AudioSource>().Play();
+        
     }
 
     private void EnableMenuCanvas()
     {
         this._menuCanvas.enabled = true;
+        this._menuCanvas.GetComponent<AudioSource>().Play();
         this._gameCanvas.enabled = false;
+        this._gameCanvas.GetComponent<AudioSource>().Stop();
         this._gameOverCanvas.enabled = false;
+        this._gameOverCanvas.GetComponent<AudioSource>().Stop();
     }
 
-    private void OnItemCollected(EItemType itemType)
-    {
-        if (itemType.Equals(EItemType.Coin))
-        {
-            CollectCoin();
-        }
-    }
-    
     private void InitCoins()
     {
         this._collectedCoins = 0;
     }
 
-    private void CollectCoin()
+    private void OnItemCollected(EItemType itemType, int value)
     {
-        ++this._collectedCoins;
-        Debug.Log(_collectedCoins);
+        switch (itemType)
+        {
+            case EItemType.Money:
+                this._collectedCoins += value;
+                break;
+            case EItemType.Health:
+                break;
+            default:
+                break;
+        }
     }
 
     public int GetCollectedCoins()

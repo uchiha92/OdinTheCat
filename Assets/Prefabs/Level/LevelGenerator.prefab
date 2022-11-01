@@ -48,4 +48,5 @@ MonoBehaviour:
   allLevelBlocks:
   - {fileID: 568053833, guid: f0cf50b34ba80424a9b09765293c1f14, type: 3}
   - {fileID: 1015791150614611713, guid: 4a361c6f0bf89f34ca852269ec17a1da, type: 3}
+  - {fileID: 568053833, guid: bdb9bb794b8d7ff4299773301f130280, type: 3}
   levelInitialPoint: {fileID: 0}

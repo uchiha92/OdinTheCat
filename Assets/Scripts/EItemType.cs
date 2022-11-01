@@ -4,6 +4,6 @@ using UnityEngine;
 
 public enum EItemType
 {
-    Coin,
-    Carrot
+    Money,
+    Health
 }

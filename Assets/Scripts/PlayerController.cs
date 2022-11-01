@@ -1,51 +1,68 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private const string LAYERGROUND = "Ground";
-    private const string ISALIVE = "isAlive";
-    private const string ISGROUNDED = "isGrounded";
-    private const string BUTTONFIRE1 = "Fire1";
+    #region Constants
+    
+    private const string LayerGround = "Ground";
+    private const string IsAlive = "isAlive";
+    private const string IsGrounded = "isGrounded";
+    private const string ButtonFire1 = "Fire1";
+    private const int MaxHealth = 6;
+    
+    #endregion
+    
+    #region Attributes
     
     private float _jumpForce;
     private float _runningSpeed;
     private float _distanceTraveled;
+    private int _healthPlayer;
+    private bool _invulnerability;
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
     private LayerMask _groundLayerMask;
     private Vector3 _startPosition;
+    private AudioSource _audioSource;
     
-    [SerializeField]
-    private KillPlayerChannel _killPlayerChannel;
-    [SerializeField]
-    private GameStateChannel _gameStateChannel;
+    #endregion
+    
+    #region Inspector
 
+    [SerializeField] 
+    private GameObject playerGameObject;
+    [SerializeField]
+    private KillPlayerChannel killPlayerChannel;
+    [SerializeField]
+    private GameStateChannel gameStateChannel;
+    [SerializeField]
+    private ItemCollectedChannel itemCollectedChannel;
+    [SerializeField] 
+    private DamagePlayerTriggerChannel damagePlayerTriggerChannel;
+    
+    #endregion
+
+    #region EventFunctions
     private void Awake()
     {
-        this._groundLayerMask = LayerMask.GetMask(LAYERGROUND);
+        this._groundLayerMask = LayerMask.GetMask(LayerGround);
         this._rigidbody2D = GetComponent<Rigidbody2D>();
         this._animator = GetComponent<Animator>();
         this._jumpForce = 25.0f;
         this._runningSpeed = 6.0f;
         this._startPosition = this.transform.position;
-        this._gameStateChannel.OnChangeGameState += OnChangeGameState;
+        this.gameStateChannel.OnChangeGameState += OnChangeGameState;
+        this._audioSource = GetComponent<AudioSource>();
     }
-    
-    private void InitPlayer()
-    {
-        this._killPlayerChannel.OnDead += Die;
-        this._animator.SetBool(ISALIVE, true);
-        this.transform.position = _startPosition;
-        InitDistanceTraveled();
-    }
-    
+
     private void Update()
     {
         if (GameManager.Instance.GetGameState().Equals(EGameState.InTheGame))
         {
-            _animator.SetBool(ISGROUNDED, IsOnTheFloor());
-            if (Input.GetButtonDown(BUTTONFIRE1) && IsOnTheFloor())
+            this._animator.SetBool(IsGrounded, IsOnTheFloor());
+            if (Input.GetButtonDown(ButtonFire1) && IsOnTheFloor())
             {
                 Jump();
             } 
@@ -57,24 +74,31 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.Instance.GetGameState().Equals(EGameState.InTheGame))
         {
-            if (_rigidbody2D.velocity.x < _runningSpeed)
+            if (this._rigidbody2D.velocity.x < this._runningSpeed)
             {
-                _rigidbody2D.velocity = new Vector2(_runningSpeed, _rigidbody2D.velocity.y);
+                this._rigidbody2D.velocity = new Vector2(this._runningSpeed, this._rigidbody2D.velocity.y);
             }
         }
     }
 
     private void OnDestroy()
     {
-        _gameStateChannel.OnChangeGameState -= OnChangeGameState;
-        _killPlayerChannel.OnDead -= Die;
+        this.gameStateChannel.OnChangeGameState -= OnChangeGameState;
+        this.killPlayerChannel.OnDead -= OnDie;
+        this.itemCollectedChannel.OnItemCollected -= OnItemCollected;
+        this.damagePlayerTriggerChannel.OnDamagePlayer -= OnDamagePlayer;
     }
+    #endregion
 
+    #region MovementFunctions
     private void Jump()
     {
-        _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+        this._rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+        this._audioSource.Play();
     }
+    #endregion
 
+    #region CheckFunctions
     private bool IsOnTheFloor()
     {
         bool isOnTheFloor = false;
@@ -85,7 +109,9 @@ public class PlayerController : MonoBehaviour
 
         return isOnTheFloor;
     }
+    #endregion
 
+    #region DistanceFunctions
     private void InitDistanceTraveled()
     {
         this._distanceTraveled = 0;
@@ -95,20 +121,44 @@ public class PlayerController : MonoBehaviour
     {
         this._distanceTraveled =
             Vector2.Distance(new Vector2(this._startPosition.x, 0), new Vector2(this.transform.position.x, 0));
-        return _distanceTraveled;
+        return this._distanceTraveled;
+    }
+    #endregion
+
+    #region HealthFunctions
+    private void CollectHealth(int value)
+    {
+        if (this._healthPlayer < MaxHealth)
+        {
+            this._healthPlayer += value;
+            Debug.Log($"Puntos restantes: {this._healthPlayer}");
+        }
     }
 
-    private void Die()
+    private void SubtractHealth()
     {
-        _animator.SetBool(ISALIVE, false);
-        Invoke("SleepPlayer",1f);
-        _killPlayerChannel.OnDead -= Die;
-        GameManager.Instance.GameOver();
+        if (this._healthPlayer > 0)
+        {
+            this._healthPlayer--;
+            SetInvulnerability(true);
+            Debug.Log($"Puntos restantes: {this._healthPlayer}");
+        }
     }
-
-    private void SleepPlayer()
+    
+    private void SetInvulnerability(bool value)
     {
-        GetComponent<Rigidbody2D>().Sleep();
+        this._invulnerability = value;
+    }
+    #endregion
+
+    #region ChannelFunctions
+    private void OnDie()
+    {
+        this._animator.SetBool(IsAlive, false);
+        Invoke(nameof(DelayGameOver),1f);
+        this.killPlayerChannel.OnDead -= OnDie;
+        this.itemCollectedChannel.OnItemCollected -= OnItemCollected;
+        this.damagePlayerTriggerChannel.OnDamagePlayer -= OnDamagePlayer;
     }
 
     private void OnChangeGameState(EGameState newGameState)
@@ -116,16 +166,91 @@ public class PlayerController : MonoBehaviour
        switch (newGameState)
        {
            case EGameState.InTheGame:
+               EnablePlayer();
                InitPlayer();
                break;
            case EGameState.Menu:
+               DisablePlayer();
                break;
            case EGameState.GameOver:
+               DisablePlayer();
                GameManager.Instance.SetFinalGameScore(_distanceTraveled);
                break;
-           default:
-               break;
        }
-       
    }
+
+    private void OnItemCollected(EItemType itemType, int value)
+    {
+        switch (itemType)
+        {
+            case EItemType.Money:
+                break;
+            case EItemType.Health:
+                CollectHealth(value);
+                break;
+        }
+    }
+
+    private void OnDamagePlayer()
+    {
+        if (!this._invulnerability)
+        {
+            SubtractHealth();
+        }
+        Invoke(nameof(DelayInvulnerability), 1.5f);
+    }
+    #endregion
+
+    #region Delays
+    private void DelayInvulnerability()
+    {
+        SetInvulnerability(false);
+    }
+    
+    private void DelayGameOver()
+    {
+        GetComponent<Rigidbody2D>().Sleep();
+        GameManager.Instance.GameOver();
+    }
+    #endregion
+
+    #region Coroutines
+    IEnumerator TirePlayer()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10f);
+            if (this._healthPlayer > 0)
+            {
+                this._healthPlayer--;
+                Debug.Log($"Puntos restantes: {this._healthPlayer}");
+            }
+        }
+    }
+    #endregion
+
+    #region GameObjectFunctions
+    private void DisablePlayer()
+    {
+        this.playerGameObject.SetActive(false);
+    }
+    
+    private void EnablePlayer()
+    {
+        this.playerGameObject.SetActive(true);
+    }
+    #endregion
+    
+   
+    private void InitPlayer()
+    {
+        this.killPlayerChannel.OnDead += OnDie;
+        this.itemCollectedChannel.OnItemCollected += OnItemCollected;
+        this.damagePlayerTriggerChannel.OnDamagePlayer += OnDamagePlayer;
+        this._healthPlayer = MaxHealth;
+        this._animator.SetBool(IsAlive, true);
+        this.transform.position = this._startPosition;
+        InitDistanceTraveled();
+        StartCoroutine(TirePlayer());
+    }
 }

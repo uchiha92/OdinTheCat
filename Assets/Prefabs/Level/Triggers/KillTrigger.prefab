@@ -71,4 +71,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d1f6ae6f278b34b88cd3f05a11059f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deadSound: {fileID: 8300000, guid: 067b99e0cdb95ed449374154fe377c24, type: 3}
   killPlayerChannel: {fileID: 11400000, guid: 04fcecd716ef16a49a94038f7047077b, type: 2}

@@ -40,17 +40,28 @@ public class UpdateGameCanvas : MonoBehaviour
        this._gameStateChannel.OnChangeGameState -= OnChangeGameState;
    }
 
-   private void OnItemCollected(EItemType itemType)
+   private void OnItemCollected(EItemType itemType, int value)
    {
-       if (itemType.Equals(EItemType.Coin))
+       if (itemType.Equals(EItemType.Money))
        {
-           this._coinsNumber.text = (GameManager.Instance.GetCollectedCoins() + 1).ToString();
+           this._coinsNumber.text = (GameManager.Instance.GetCollectedCoins() + value).ToString();
        }
    }
 
    private void SetRecordPointsText()
    {
        this._recordPoints.text = PlayerPrefs.GetFloat(HIGHSCORE, 0).ToString("f0");
+   }
+   
+   private void SetCoinsNumberText()
+   {
+       this._coinsNumber.text = 0.ToString();
+   }
+
+   private void InitGameCanvas()
+   {
+       SetCoinsNumberText();
+       SetRecordPointsText();
    }
    
    private bool CheckHighScore()
@@ -71,7 +82,7 @@ public class UpdateGameCanvas : MonoBehaviour
        switch (newGameState)
        {
            case EGameState.InTheGame:
-               SetRecordPointsText();
+               InitGameCanvas();
                break;
            case EGameState.Menu:
                break;

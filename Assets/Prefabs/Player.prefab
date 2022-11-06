@@ -140,7 +140,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.12, y: -0.06}
+  m_Offset: {x: -0.2, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
 --- !u!114 &366184732136598147
@@ -160,6 +160,7 @@ MonoBehaviour:
   gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
   itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}
   damagePlayerTriggerChannel: {fileID: 11400000, guid: c415996c9e477164ca5f0e930b8c09ac, type: 2}
+  healthPlayerChannel: {fileID: 11400000, guid: d8922824924fbfd4ab695a314a737476, type: 2}
 --- !u!95 &1235552421
 Animator:
   serializedVersion: 4

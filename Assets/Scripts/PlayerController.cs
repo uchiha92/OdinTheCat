@@ -9,13 +9,14 @@ public class PlayerController : MonoBehaviour
     private const string LayerGround = "Ground";
     private const string IsAlive = "isAlive";
     private const string IsGrounded = "isGrounded";
+    private const string IsHurt = "isHurt";
     private const string ButtonFire1 = "Fire1";
-    private const int MaxHealth = 6;
-    
+
     #endregion
     
     #region Attributes
-    
+
+    private int _maxHealth;
     private float _jumpForce;
     private float _runningSpeed;
     private float _distanceTraveled;
@@ -30,7 +31,9 @@ public class PlayerController : MonoBehaviour
     #endregion
     
     #region Inspector
-
+    
+    public static PlayerController Instance;
+    
     [SerializeField] 
     private GameObject playerGameObject;
     [SerializeField]
@@ -41,17 +44,28 @@ public class PlayerController : MonoBehaviour
     private ItemCollectedChannel itemCollectedChannel;
     [SerializeField] 
     private DamagePlayerTriggerChannel damagePlayerTriggerChannel;
+    [SerializeField] 
+    private HealthPlayerChannel healthPlayerChannel;
     
     #endregion
 
     #region EventFunctions
     private void Awake()
     {
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
         this._groundLayerMask = LayerMask.GetMask(LayerGround);
         this._rigidbody2D = GetComponent<Rigidbody2D>();
         this._animator = GetComponent<Animator>();
         this._jumpForce = 25.0f;
         this._runningSpeed = 6.0f;
+        this._maxHealth = 6;
         this._startPosition = this.transform.position;
         this.gameStateChannel.OnChangeGameState += OnChangeGameState;
         this._audioSource = GetComponent<AudioSource>();
@@ -126,12 +140,30 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region HealthFunctions
+
+    public int GetMaxHealth()
+    {
+        return this._maxHealth;
+    }
+
+    public int GetHealthPlayer()
+    {
+        return this._healthPlayer;
+    }
     private void CollectHealth(int value)
     {
-        if (this._healthPlayer < MaxHealth)
+        if (this._healthPlayer < this._maxHealth)
         {
-            this._healthPlayer += value;
-            Debug.Log($"Puntos restantes: {this._healthPlayer}");
+            if (this._healthPlayer + value < this._maxHealth)
+            {
+                this._healthPlayer += value;
+            }
+            else
+            {
+                this._healthPlayer = this._maxHealth;
+            }
+
+            this.healthPlayerChannel.InvokeOnHealthIncrease(value);
         }
     }
 
@@ -141,7 +173,8 @@ public class PlayerController : MonoBehaviour
         {
             this._healthPlayer--;
             SetInvulnerability(true);
-            Debug.Log($"Puntos restantes: {this._healthPlayer}");
+            this._animator.SetBool(IsHurt, true);
+            this.healthPlayerChannel.InvokeOnHealthDecrease();
         }
     }
     
@@ -205,6 +238,7 @@ public class PlayerController : MonoBehaviour
     private void DelayInvulnerability()
     {
         SetInvulnerability(false);
+        this._animator.SetBool(IsHurt, false);
     }
     
     private void DelayGameOver()
@@ -223,7 +257,7 @@ public class PlayerController : MonoBehaviour
             if (this._healthPlayer > 0)
             {
                 this._healthPlayer--;
-                Debug.Log($"Puntos restantes: {this._healthPlayer}");
+                this.healthPlayerChannel.InvokeOnHealthDecrease();
             }
         }
     }
@@ -247,7 +281,8 @@ public class PlayerController : MonoBehaviour
         this.killPlayerChannel.OnDead += OnDie;
         this.itemCollectedChannel.OnItemCollected += OnItemCollected;
         this.damagePlayerTriggerChannel.OnDamagePlayer += OnDamagePlayer;
-        this._healthPlayer = MaxHealth;
+        this._healthPlayer = this._maxHealth;
+        this.healthPlayerChannel.InvokeOnHealthIncrease(this._maxHealth);
         this._animator.SetBool(IsAlive, true);
         this.transform.position = this._startPosition;
         InitDistanceTraveled();

@@ -7,7 +7,6 @@ using UnityEngine;
 public class UpdateGameCanvas : MonoBehaviour
 {
    private const string HIGHSCORE = "highscore";
-   [SerializeField] 
    private PlayerController _playerController;
    [SerializeField] 
    private TextMeshProUGUI _coinsNumber;
@@ -22,6 +21,7 @@ public class UpdateGameCanvas : MonoBehaviour
 
    private void Start()
    {
+       this._playerController = PlayerController.Instance;
        this._itemCollectedChannel.OnItemCollected += OnItemCollected;
        this._gameStateChannel.OnChangeGameState += OnChangeGameState;
    }

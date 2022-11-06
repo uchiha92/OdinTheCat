@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class TriggerMovement : MonoBehaviour
 {
-    //public bool _turnAround;
-    [SerializeField] 
-    private EnemyMovementChannel enemyMovementChannel;
+    private bool _turnAround;
 
-   /* private void SetTurnAround(bool value)
+    private void SetTurnAround(bool value)
     {
         this._turnAround = value;
     }
@@ -17,14 +15,13 @@ public class TriggerMovement : MonoBehaviour
     public bool GetTurnAround()
     {
         return this._turnAround;
-    }*/
+    }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Obstacle"))
         {
-            //SetTurnAround(true);
-            enemyMovementChannel.InvokeOnBumping();
+            SetTurnAround(!_turnAround);
         }
         
         
@@ -34,8 +31,7 @@ public class TriggerMovement : MonoBehaviour
     {
         if (other.CompareTag("Floor"))
         {
-            //SetTurnAround(true);
-            enemyMovementChannel.InvokeOnBumping();
+            SetTurnAround(!_turnAround);
         }
     }
 }

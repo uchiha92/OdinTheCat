@@ -35,6 +35,7 @@ public class Item : MonoBehaviour
 
     void Collect()
     {
+        if(this._itemType != EItemType.Health || PlayerController.Instance.GetHealthPlayer() < PlayerController.Instance.GetMaxHealth()){}
         Hide();
         this._isCollected = true;
         this._itemCollectedChannel.InvokeItemCollected(this._itemType, this._value);
@@ -48,9 +49,14 @@ public class Item : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
+        bool canCollect = this._itemType != EItemType.Health ||
+                          PlayerController.Instance.GetHealthPlayer() < PlayerController.Instance.GetMaxHealth();
         if (other.tag.Equals("Player"))
         {
-            Collect();
+            if (canCollect)
+            {
+                Collect();
+            }
         }
     }
 }

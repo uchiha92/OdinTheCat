@@ -5,10 +5,10 @@ using UnityEngine;
 public class LevelBlock : MonoBehaviour
 {
     [SerializeField]
-    private Transform _exitPoint;
+    private Transform exitPoint;
 
     public Transform GetExitPoint()
     {
-        return this._exitPoint;
+        return exitPoint;
     }
 }

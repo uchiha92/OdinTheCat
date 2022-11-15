@@ -4,10 +4,11 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - _menuCanvas: {fileID: 3547554481007581008, guid: 3c7316b5b761a4b47a153cd5eba96a58, type: 3}
-  - _gameCanvas: {instanceID: 0}
-  - _gameOverCanvas: {instanceID: 0}
+  - menuCanvas: {instanceID: 0}
+  - gameCanvas: {instanceID: 0}
+  - gameOverCanvas: {instanceID: 0}
   - gameStateChannel: {fileID: 11400000, guid: 23b01a18774f88740a6902ddbfa055d2, type: 2}
+  - itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93cff734c235e7d46866ce1cdc3acc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _value: 1
-  _itemSound: {fileID: 8300000, guid: d26fae1b1b8a67c499ae4f6e47cc31c4, type: 3}
-  _itemType: 0
-  _itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}
+  value: 1
+  itemSound: {fileID: 8300000, guid: d26fae1b1b8a67c499ae4f6e47cc31c4, type: 3}
+  itemType: 0
+  itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}

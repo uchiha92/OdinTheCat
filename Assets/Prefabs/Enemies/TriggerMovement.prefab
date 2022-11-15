@@ -71,4 +71,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12cc15972216ddd4c9ac3cc518e3607e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMovementChannel: {fileID: 11400000, guid: 96d9d700a4ead7341a679035c447ec4c, type: 2}
+  damagePlayerTriggerChannel: {fileID: 11400000, guid: c415996c9e477164ca5f0e930b8c09ac, type: 2}

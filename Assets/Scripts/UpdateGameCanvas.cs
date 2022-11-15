@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 
@@ -21,41 +22,41 @@ public class UpdateGameCanvas : MonoBehaviour
 
    private void Start()
    {
-       this._playerController = PlayerController.Instance;
-       this._itemCollectedChannel.OnItemCollected += OnItemCollected;
-       this._gameStateChannel.OnChangeGameState += OnChangeGameState;
+       _playerController = PlayerController.Instance;
+       _itemCollectedChannel.OnItemCollected += OnItemCollected;
+       _gameStateChannel.OnChangeGameState += OnChangeGameState;
    }
 
    private void Update()
    {
        if (GameManager.Instance.GetGameState().Equals(EGameState.InTheGame))
        {
-           this._scorePoints.text = _playerController.GetDistanceTravelled().ToString("f0");
+           _scorePoints.text = _playerController.GetDistanceTravelled().ToString("f0");
        }
    }
 
    private void OnDestroy()
    {
-       this._itemCollectedChannel.OnItemCollected -= OnItemCollected;
-       this._gameStateChannel.OnChangeGameState -= OnChangeGameState;
+       _itemCollectedChannel.OnItemCollected -= OnItemCollected;
+       _gameStateChannel.OnChangeGameState -= OnChangeGameState;
    }
 
    private void OnItemCollected(EItemType itemType, int value)
    {
        if (itemType.Equals(EItemType.Money))
        {
-           this._coinsNumber.text = (GameManager.Instance.GetCollectedCoins() + value).ToString();
+           _coinsNumber.text = (GameManager.Instance.GetCollectedCoins() + value).ToString();
        }
    }
 
    private void SetRecordPointsText()
    {
-       this._recordPoints.text = PlayerPrefs.GetFloat(HIGHSCORE, 0).ToString("f0");
+       _recordPoints.text = PlayerPrefs.GetFloat(HIGHSCORE, 0).ToString("f0");
    }
    
    private void SetCoinsNumberText()
    {
-       this._coinsNumber.text = 0.ToString();
+       _coinsNumber.text = 0.ToString();
    }
 
    private void InitGameCanvas()

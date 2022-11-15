@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_ItemCollectedChannel",menuName = "Data/Channels/ItemCollectedChannel")]
-public class ItemCollectedChannel : ScriptableObject
+namespace ScriptableObjects
 {
-    public Action<EItemType, int> OnItemCollected;
-
-    public void InvokeItemCollected(EItemType itemType, int value)
+    [CreateAssetMenu(fileName = "SO_ItemCollectedChannel",menuName = "Data/Channels/ItemCollectedChannel")]
+    public class ItemCollectedChannel : ScriptableObject
     {
-        OnItemCollected?.Invoke(itemType, value);
+        public Action<EItemType, int> OnItemCollected;
+
+        public void InvokeItemCollected(EItemType itemType, int value)
+        {
+            OnItemCollected?.Invoke(itemType, value);
+        }
     }
 }

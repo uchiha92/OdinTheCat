@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_DamagePlayerTriggerChannel",menuName = "Data/Channels/DamagePlayerTriggerChannel")]
-public class DamagePlayerTriggerChannel : ScriptableObject
+namespace ScriptableObjects
 {
-    public Action OnDamagePlayer;
-
-    public void InvokeOnDamagePlayer()
+    [CreateAssetMenu(fileName = "SO_DamagePlayerTriggerChannel",menuName = "Data/Channels/DamagePlayerTriggerChannel")]
+    public class DamagePlayerTriggerChannel : ScriptableObject
     {
-        OnDamagePlayer?.Invoke();
+        public Action OnDamagePlayer;
+
+        public void InvokeOnDamagePlayer()
+        {
+            OnDamagePlayer?.Invoke();
+        }
     }
 }

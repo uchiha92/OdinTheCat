@@ -1,4 +1,5 @@
 using System;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +20,7 @@ public class KillTrigger : MonoBehaviour
 
    private void KillPlayer()
    {
-      AudioSource.PlayClipAtPoint(this._deadSound, transform.position);
+      AudioSource.PlayClipAtPoint(_deadSound, transform.position);
       killPlayerChannel.InvokeOnDead();
    }
 }

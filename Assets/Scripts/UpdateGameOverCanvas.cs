@@ -1,31 +1,46 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using ScriptableObjects;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+
 public class UpdateGameOverCanvas : MonoBehaviour
 {
     [SerializeField] 
-    private TextMeshProUGUI _scorePoints;
+    private TextMeshProUGUI scorePoints;
     [SerializeField] 
-    private TextMeshProUGUI _coinsNumber;
+    private TextMeshProUGUI coinsNumber;
+    [SerializeField] 
+    private Button playAgainButton, returnMenuButton;
     [SerializeField]
-    private GameStateChannel _gameStateChannel;
+    private GameStateChannel gameStateChannel;
 
     private void Start()
     {
-        this._gameStateChannel.OnChangeGameState += OnChangeGameState;
+        gameStateChannel.OnChangeGameState += OnChangeGameState;
     }
 
     private void OnDestroy()
     {
-        this._gameStateChannel.OnChangeGameState -= OnChangeGameState;
+        gameStateChannel.OnChangeGameState -= OnChangeGameState;
     }
 
     private void SetScorePointsAndCoins()
     {
-        this._scorePoints.text = GameManager.Instance.GetFinalGameScore().ToString("f0");
-        this._coinsNumber.text = GameManager.Instance.GetCollectedCoins().ToString();
+        scorePoints.text = GameManager.Instance.GetFinalGameScore().ToString("f0");
+        coinsNumber.text = GameManager.Instance.GetCollectedCoins().ToString();
+    }
+    
+    private void DisableButtons()
+    {
+        playAgainButton.interactable = false;
+        returnMenuButton.interactable = false;
+    }
+    
+    private void EnableButtons()
+    {
+        playAgainButton.interactable = true;
+        returnMenuButton.interactable = true;
+        playAgainButton.Select();
     }
     
     private void OnChangeGameState(EGameState newGameState)
@@ -33,13 +48,14 @@ public class UpdateGameOverCanvas : MonoBehaviour
         switch (newGameState)
         {
             case EGameState.InTheGame:
+                DisableButtons();
                 break;
             case EGameState.Menu:
+                DisableButtons();
                 break;
             case EGameState.GameOver:
+                EnableButtons();
                 SetScorePointsAndCoins();
-                break;
-            default:
                 break;
         }
     }

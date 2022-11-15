@@ -1,19 +1,34 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_HealthPlayerChannel",menuName = "Data/Channels/HealthPlayerChannel")]
-public class HealthPlayerChannel : ScriptableObject
+namespace ScriptableObjects
 {
-    public Action OnHealthDecrease;
-    public Action<int> OnHealthIncrease;
-
-    public void InvokeOnHealthDecrease()
+    [CreateAssetMenu(fileName = "SO_HealthPlayerChannel",menuName = "Data/Channels/HealthPlayerChannel")]
+    public class HealthPlayerChannel : ScriptableObject
     {
-        OnHealthDecrease?.Invoke();
-    }
+        public Action OnHealthDecrease;
+        public Action<int> OnHealthIncrease;
+        public Action OnLowHealth;
+        public Action OnHighHealth;
 
-    public void InvokeOnHealthIncrease(int value)
-    {
-        OnHealthIncrease?.Invoke(value);
+        public void InvokeOnHealthDecrease()
+        {
+            OnHealthDecrease?.Invoke();
+        }
+
+        public void InvokeOnHealthIncrease(int value)
+        {
+            OnHealthIncrease?.Invoke(value);
+        }
+
+        public void InvokeOnLowHealth()
+        {
+            OnLowHealth?.Invoke();
+        }
+    
+        public void InvokeOnHighHealth()
+        {
+            OnHighHealth?.Invoke();
+        }
     }
 }

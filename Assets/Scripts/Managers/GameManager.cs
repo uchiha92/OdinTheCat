@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Rendering;
+
 
 
 public class GameManager : MonoBehaviour
@@ -12,15 +10,15 @@ public class GameManager : MonoBehaviour
     private int _collectedCoins;
     private float _finalGameScore;
     [SerializeField]
-    private Canvas _menuCanvas;
+    private Canvas menuCanvas;
     [SerializeField]
-    private Canvas _gameCanvas;
+    private Canvas gameCanvas;
     [SerializeField]
-    private Canvas _gameOverCanvas;
+    private Canvas gameOverCanvas;
     [SerializeField]
-    private GameStateChannel _gameStateChannel;
+    private GameStateChannel gameStateChannel;
     [SerializeField]
-    private ItemCollectedChannel _itemCollectedChannel;
+    private ItemCollectedChannel itemCollectedChannel;
 
     private void Awake()
     {
@@ -42,12 +40,12 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        this._itemCollectedChannel.OnItemCollected -= OnItemCollected;
+        itemCollectedChannel.OnItemCollected -= OnItemCollected;
     }
 
     public void StartGame()
     {
-        this._itemCollectedChannel.OnItemCollected += OnItemCollected;
+        itemCollectedChannel.OnItemCollected += OnItemCollected;
         LevelGenerator.Instance.GenerateInitialBlocks();
         EnableGameCanvas();
         InitCoins();
@@ -56,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        this._itemCollectedChannel.OnItemCollected -= OnItemCollected;
+        itemCollectedChannel.OnItemCollected -= OnItemCollected;
         LevelGenerator.Instance.RemoveAllTheBlocks();
         EnableGameOverCanvas();
         SetGameState(EGameState.GameOver);
@@ -70,38 +68,38 @@ public class GameManager : MonoBehaviour
 
     private void EnableGameCanvas()
     {
-        this._menuCanvas.enabled = false;
-        this._menuCanvas.GetComponent<AudioSource>().Stop();
-        this._gameCanvas.enabled = true;
-        this._gameCanvas.GetComponent<AudioSource>().Play();
-        this._gameOverCanvas.enabled = false;
-        this._gameOverCanvas.GetComponent<AudioSource>().Stop();
+        menuCanvas.enabled = false;
+        menuCanvas.GetComponent<AudioSource>().Stop();
+        gameCanvas.enabled = true;
+        gameCanvas.GetComponent<AudioSource>().Play();
+        gameOverCanvas.enabled = false;
+        gameOverCanvas.GetComponent<AudioSource>().Stop();
     }
 
     private void EnableGameOverCanvas()
     {
-        this._menuCanvas.enabled = false;
-        this._menuCanvas.GetComponent<AudioSource>().Stop();
-        this._gameCanvas.enabled = false;
-        this._gameCanvas.GetComponent<AudioSource>().Stop();
-        this._gameOverCanvas.enabled = true;
-        this._gameOverCanvas.GetComponent<AudioSource>().Play();
+        menuCanvas.enabled = false;
+        menuCanvas.GetComponent<AudioSource>().Stop();
+        gameCanvas.enabled = false;
+        gameCanvas.GetComponent<AudioSource>().Stop();
+        gameOverCanvas.enabled = true;
+        gameOverCanvas.GetComponent<AudioSource>().Play();
         
     }
 
     private void EnableMenuCanvas()
     {
-        this._menuCanvas.enabled = true;
-        this._menuCanvas.GetComponent<AudioSource>().Play();
-        this._gameCanvas.enabled = false;
-        this._gameCanvas.GetComponent<AudioSource>().Stop();
-        this._gameOverCanvas.enabled = false;
-        this._gameOverCanvas.GetComponent<AudioSource>().Stop();
+        menuCanvas.enabled = true;
+        menuCanvas.GetComponent<AudioSource>().Play();
+        gameCanvas.enabled = false;
+        gameCanvas.GetComponent<AudioSource>().Stop();
+        gameOverCanvas.enabled = false;
+        gameOverCanvas.GetComponent<AudioSource>().Stop();
     }
 
     private void InitCoins()
     {
-        this._collectedCoins = 0;
+        _collectedCoins = 0;
     }
 
     private void OnItemCollected(EItemType itemType, int value)
@@ -109,7 +107,7 @@ public class GameManager : MonoBehaviour
         switch (itemType)
         {
             case EItemType.Money:
-                this._collectedCoins += value;
+                _collectedCoins += value;
                 break;
             case EItemType.Health:
                 break;
@@ -120,27 +118,27 @@ public class GameManager : MonoBehaviour
 
     public int GetCollectedCoins()
     {
-        return this._collectedCoins;
+        return _collectedCoins;
     }
 
     public float GetFinalGameScore()
     {
-        return this._finalGameScore;
+        return _finalGameScore;
     }
 
     public void SetFinalGameScore(float finalGameScore)
     {
-        this._finalGameScore = finalGameScore;
+        _finalGameScore = finalGameScore;
     }
 
     private void SetGameState(EGameState gameState)
     {
-        this._gameState = gameState;
-        this._gameStateChannel.InvokeOnChangeGameState(gameState);
+        _gameState = gameState;
+        gameStateChannel.InvokeOnChangeGameState(gameState);
     }
 
     public EGameState GetGameState()
     {
-        return this._gameState;
+        return _gameState;
     }
 }

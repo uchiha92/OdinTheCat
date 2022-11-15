@@ -9,12 +9,12 @@ public class TriggerMovement : MonoBehaviour
 
     private void SetTurnAround(bool value)
     {
-        this._turnAround = value;
+        _turnAround = value;
     }
 
     public bool GetTurnAround()
     {
-        return this._turnAround;
+        return _turnAround;
     }
     
     private void OnTriggerEnter2D(Collider2D other)
@@ -23,8 +23,6 @@ public class TriggerMovement : MonoBehaviour
         {
             SetTurnAround(!_turnAround);
         }
-        
-        
     }
 
     private void OnTriggerExit2D(Collider2D other)

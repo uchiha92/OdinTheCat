@@ -99,10 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93cff734c235e7d46866ce1cdc3acc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _value: 1
-  _itemSound: {fileID: 8300000, guid: b5cd93da7c8c18c42aa739bbf4b4fdec, type: 3}
-  _itemType: 1
-  _itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}
+  value: 1
+  itemSound: {fileID: 8300000, guid: b5cd93da7c8c18c42aa739bbf4b4fdec, type: 3}
+  itemType: 1
+  itemCollectedChannel: {fileID: 11400000, guid: 3f550654f59075b42bae11a39b525df6, type: 2}
 --- !u!95 &6042904570501400620
 Animator:
   serializedVersion: 4

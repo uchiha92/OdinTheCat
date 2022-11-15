@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_GameStateChannel",menuName = "Data/Channels/GameStateChannel")]
-public class GameStateChannel : ScriptableObject
+namespace ScriptableObjects
 {
-    public Action<EGameState> OnChangeGameState;
-
-    public void InvokeOnChangeGameState(EGameState newGameState)
+    [CreateAssetMenu(fileName = "SO_GameStateChannel",menuName = "Data/Channels/GameStateChannel")]
+    public class GameStateChannel : ScriptableObject
     {
-        OnChangeGameState?.Invoke(newGameState);
+        public Action<EGameState> OnChangeGameState;
+
+        public void InvokeOnChangeGameState(EGameState newGameState)
+        {
+            OnChangeGameState?.Invoke(newGameState);
+        }
     }
 }

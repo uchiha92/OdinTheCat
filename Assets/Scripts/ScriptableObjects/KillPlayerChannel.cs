@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_KillPlayerChannel",menuName = "Data/Channels/KillPlayerChannel")]
-public class KillPlayerChannel : ScriptableObject
+namespace ScriptableObjects
 {
-    public Action OnDead;
-
-    public void InvokeOnDead()
+    [CreateAssetMenu(fileName = "SO_KillPlayerChannel",menuName = "Data/Channels/KillPlayerChannel")]
+    public class KillPlayerChannel : ScriptableObject
     {
-        OnDead?.Invoke();
+        public Action OnDead;
+
+        public void InvokeOnDead()
+        {
+            OnDead?.Invoke();
+        }
     }
 }

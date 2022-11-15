@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 928045676887427510}
   - component: {fileID: 928045676887427529}
   - component: {fileID: 3705548647335873081}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: goomba
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerMovement: {fileID: 4948713304252471597, guid: 19cff7180e997c24e8b5f3774601184a, type: 3}
+  damagePlayerTriggerChannel: {fileID: 11400000, guid: c415996c9e477164ca5f0e930b8c09ac, type: 2}
 --- !u!1001 &6259597916174813558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,6 +149,10 @@ PrefabInstance:
     - target: {fileID: 1046119315019273812, guid: 19cff7180e997c24e8b5f3774601184a, type: 3}
       propertyPath: m_Name
       value: TriggerMovement
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046119315019273812, guid: 19cff7180e997c24e8b5f3774601184a, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6544386199140425003, guid: 19cff7180e997c24e8b5f3774601184a, type: 3}
       propertyPath: m_RootOrder
